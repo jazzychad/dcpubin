@@ -1,7 +1,10 @@
 {
   "name": "dcpubin",
   "version": "0.0.1",
+  "private": true,
   "dependencies": {
-    "express": "2.5.9"
+    "express": "2.5.9",
+    "jade": ">= 0.0.1",
+    "mongoose": "2.5.10"
   }
 }
