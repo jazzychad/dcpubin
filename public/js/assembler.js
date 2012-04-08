@@ -122,6 +122,7 @@ var Assembler =
 
 	 while(code.length > 0) {
 	   var line = code.substr(0, code.indexOf('\n'));
+	   var prevline = null;
 	   if(code.indexOf('\n') === -1) break;
 	   else code = code.substr(code.indexOf('\n') + 1);
 
@@ -309,7 +310,12 @@ var Assembler =
 		 parse(a);
 	       }
 
-	       for(var j in words) mem[address++] = words[j];
+	       for(var j in words) {
+		 var linep = (line == prevline) ? "" : line;
+		 prevline = line;
+		 var print = hex(words[j]) + "  " + (linep ? hex(address) : "") + "  " + linep;
+		 mem[address++] = print.trim();
+	       }
 	       instruction++;
 	       //console.log('Added instruction %d (%s, %s, %s)', instruction, op, a, b);
 	       //for(var j in words) console.log(j + ': ' + hex(words[j]));

@@ -50,9 +50,9 @@
 	Assembly
 	<br/>
 	<button onClick="javascript:assemble(); return false;" value="assemble" >ASSEMBLE</button>
-	<button onClick="javascript:assemble();reset_cpu();hexload(); return false" value="asm,rst,load">ASM, RST, LOAD</button>
+	<button onClick="javascript:assemble();reset_cpu();hexload(); return false;" value="asm,rst,load">ASM, RST, LOAD</button>
 	<br/>
-	<button onClick="javascript:assemble();reset_cpu();hexload();main(); return false" value="asm,rst,load">ASM, RST, LOAD, RUN</button>
+	<button onClick="javascript:assemble();reset_cpu();hexload();main(); return false;" value="asm,rst,load">ASM, RST, LOAD, RUN</button>
 	<br/>
 	<textarea id="assembly" name="prog" rows=80 cols=40 wrap="off"><%= prog.prog %></textarea>
       </div>
@@ -62,9 +62,9 @@
 	<button onClick="javascript:reset_cpu(); return false;" value="stop" >RESET</button>
 	<button onClick="javascript:hexload(); return false;" value="stop" >LOAD</button>
 	<br/>
-	<button onClick="javascript:main();return false;" value="go" >RUN</button>
+	<button onClick="javascript:try{main();}catch(e){_trace(e,true);}return false;" value="go" >RUN</button>
 	<button onClick="javascript:running=false; return false;" value="stop" >STOP</button>
-	<button onClick="javascript:step();; return false;" value="stop" >STEP</button>
+	<button onClick="javascript:try{step();}catch(e){_trace(e,true);} return false;" value="stop" >STEP</button>
 	<br/>
 	<textarea id="hexbin" name="hex" rows=80 cols=20 wrap="off"><%= prog.hex %></textarea>
       </div>

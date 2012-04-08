@@ -471,7 +471,7 @@ function assemble() {
     document.getElementById("hexbin").value = s;
     
   } catch (e) {
-    document.getElementById("hexbin").value = e
+    document.getElementById("hexbin").value = e;
     _trace(e, true);
   }
 }
