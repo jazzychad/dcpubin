@@ -3,19 +3,50 @@
     <title>dcpu javascript emulator</title>
     <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon">
+    <style>
+      textarea {font-family:"Courier New", Courier, monospace;}
+      #t {background-color: #eee; padding:5px;}
+      #hex, #asm {padding: 5px;}
+      #console {background-color: #00f; color: #fff;}
+    </style>
   </head>
   <body>
     <div id="container">
-      <h1>dcpubin</h1>
-      <% if (prog.shortid) { %>
-      <input type="text" size=50 name="asdfasdf" value="http://dcpubin.com/<%= prog.shortid %>"></input>
-      <p/>
+      <span style="font-size: 36px; font-weight: bold;">dcpubin</span>
+      <a href="http://0x10c.com/doc/dcpu-16.txt">dcpu spec</a>
+      <% if (show_copy) { %>
+      <input type="text" size=40 name="asdfasdf" value="http://dcpubin.com/<%= prog.shortid %>"></input>
+      <!-- clippy -->
+      <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000"
+              width="110"
+              height="14"
+              id="clippy" >
+	<param name="movie" value="/swf/clippy.swf"/>
+	<param name="allowScriptAccess" value="always" />
+	<param name="quality" value="high" />
+	<param name="scale" value="noscale" />
+	<param NAME="FlashVars" value="text=http://dcpubin.com/<%= prog.shortid %>">
+	<param name="bgcolor" value="#fff">
+	<embed src="/swf/clippy.swf"
+               width="110"
+               height="14"
+               name="clippy"
+               quality="high"
+               allowScriptAccess="always"
+               type="application/x-shockwave-flash"
+               pluginspage="http://www.macromedia.com/go/getflashplayer"
+               FlashVars="text=http://dcpubin.com/<%= prog.shortid %>"
+               bgcolor="#fff"
+	       />
+      </object>
+      <!-- end clippy -->
+      
       <% } %>
       <form method="POST" action="/new">
       <input type="submit" value="SAVE PROGRAM"></input>
       <p/>
       <p/>
-      <div id="hex" style="position:relative; float:left;">
+      <div id="asm" style="position:relative; float:left;">
 	Assembly
 	<br/>
 	<button onClick="javascript:assemble(); return false;" value="assemble" >ASSEMBLE</button>
@@ -23,7 +54,7 @@
 	<br/>
 	<button onClick="javascript:assemble();reset_cpu();hexload();main(); return false" value="asm,rst,load">ASM, RST, LOAD, RUN</button>
 	<br/>
-	<textarea id="assembly" name="prog" rows=80 cols=30><%= prog.prog %></textarea>
+	<textarea id="assembly" name="prog" rows=80 cols=40 wrap="off"><%= prog.prog %></textarea>
       </div>
       <div id="hex" style="position:relative; float:left;">
 	Hex program. One word per line.
@@ -35,20 +66,20 @@
 	<button onClick="javascript:running=false; return false;" value="stop" >STOP</button>
 	<button onClick="javascript:step();; return false;" value="stop" >STEP</button>
 	<br/>
-	<textarea id="hexbin" name="hex" rows=80 cols=40><%= prog.hex %></textarea>
+	<textarea id="hexbin" name="hex" rows=80 cols=20 wrap="off"><%= prog.hex %></textarea>
       </div>
       <div id="t" style="position:relative; float:left;">
-	Registers/RAM:
+	Registers/RAM: <input type="checkbox" id="enramconsole" checked="checked"></input>
 	<br/>
-	<pre id="ramconsole" style="height:auto; width:600px; margin-bottom:10px;"></pre>
+	<pre id="ramconsole" style="height:auto; width:auto; margin-bottom:10px;"></pre>
 	<hr/>
-	Trace:
+	Trace: <input type="checkbox" id="entrace" checked="checked"></input>
 	<br/>
-	<button onClick="javascript:document.getElementById('trace').innerText='';">Clear</button>
+	<button onClick="javascript:document.getElementById('trace').innerText='';return false;">Clear</button>
 	<br/>
-	<pre id="trace" style="height:400px; width:600px; overflow:auto;"></pre>
+	<pre id="trace" style="height:400px; width:auto; overflow:auto;"></pre>
       </div>
-      <div id="c" style="position:relative; width:100px; float:left; margin-left: 20px;">
+      <div id="c" style="position:relative; width:auto; float:left; margin-left: 20px;">
 	Console (32x32):
 	<br/>
 	<pre id="console"></pre>
@@ -60,8 +91,6 @@
 	<p/>
 	Resources:
 	<p/>
-	<a href="http://0x10c.com/doc/dcpu-16.txt">dcpu spec</a>
-	<br/>
 	<a href="https://github.com/jazzychad/dcpu-js">javascript emulator source</a>
 	<br/>
 	<a href="https://github.com/jazzychad/dcpu-asm">sample dcpu programs</a>

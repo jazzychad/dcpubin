@@ -7,10 +7,13 @@ var Prog = require("../models/prog").Prog;
 
 exports.index = function(req, res) {
   var shortid;
+  var show_copy;
   if (req.params.id) {
     shortid = req.params.id;
+    show_copy = true;
   } else {
     shortid = "esRCW6cRn";
+    show_copy = false;
   }
   if (shortid) {
     Prog.findOne({shortid: shortid}, function(err, doc) {
@@ -18,18 +21,15 @@ exports.index = function(req, res) {
 		     res.end('program not found');
 		   }
 		   if (doc) {
-		     res.render('home.ejs', {layout: false,  prog: doc, title: 'Express' });  
+		     res.render('home.ejs', {layout: false,  prog: doc, show_copy: show_copy});  
 		   } else {
 		     var prog = {prog: "", hex: "", shortid: null};
-		     res.render('home.ejs', {layout: false,  prog: prog, title: 'Express' });  
-		     //res.end('no prog');
+		     res.render('home.ejs', {layout: false,  prog: prog, show_copy: false});  
 		   }
 		   
 		 });
   } else {
-    //var prog = new Prog();
-    var prog = {prog: "", hex: ""};
-    res.render('home.ejs', {layout: false,  prog: prog, title: 'Express' });  
+    res.end('error');
   }
   
 };

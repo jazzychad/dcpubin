@@ -26,7 +26,7 @@ var _trace = function(msg) {
   //  console.log(msg);
   //}
   var c = document.getElementById("trace");
-  if (c) {
+  if (c && document.getElementById("entrace").checked) {
     var s = c.innerText;
     s = s + msg + "\n";
     c.innerText = s;
@@ -35,7 +35,7 @@ var _trace = function(msg) {
 };
 var _ramlog = function(msg) {
   var c = document.getElementById("ramconsole");
-  if (c) {
+  if (c && document.getElementById("enramconsole").checked) {
     c.innerHTML = msg;
   }
 };
@@ -80,6 +80,9 @@ var skiptable = [
 1, //0x1e
 1  //0x1f
 ];
+for (var skipi = 0x20; skipi<0x40; skipi++) {
+  skiptable[skipi] = 0;
+}
 
 var dcpu = function() {
   this.ramsize = 0x10000;
@@ -120,7 +123,7 @@ var dcpu = function() {
 
 var dcpu_skip = function(d) {
   var op = d.data[d.m + d.data[d.pc]++];
-  d.data[d.pc] += skiptable[(op >> 10) & 0xffff];
+  d.data[d.pc] += skiptable[(op >> 10) & 0x3f];
   if ((op & 15) == 0) {
     d.data[d.pc] += skiptable[(op >> 4) & 31];
   }
@@ -293,7 +296,7 @@ var dcpu_print = function(d) {
   var j = 0;
   for (i = d.video_start, _end = d.video_start + d.video_size; i < _end; i++) {
     word = d.data[i];
-    s += (word && 0xff) ? String.fromCharCode(word & 0xff) : ".";
+    s += (word && 0xff) ? String.fromCharCode(word & 0xff) : " ";
     j++;
     if (!(j % 32)) {
       s += "\n";
