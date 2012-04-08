@@ -142,6 +142,17 @@ var Assembler =
 	  var mem = [];
 	  var prevline = null;
 
+	  function isRegister(s) {
+	    switch(s) {
+	    case 'a': case 'b': case 'c': case 'x': case 'y': case 'z':
+	    case 'i': case 'j': case 'pc': case 'sp': case 'o':
+	      return true;
+	    default:
+	      return false;  
+	    }
+	    return false;
+	  }
+
 	  function pack(value) {
 	    if(opcodes[op] !== null) words[0] += value << (4 + operand * 6);
 	  }
@@ -184,7 +195,8 @@ var Assembler =
 	    //next word + register
 	    else if(pointer && arg.split('+').length === 2
 		    && typeof arg.split('+')[1] === 'string'
-		    && typeof mem[arg.split('+')[1].toLowerCase()] === 'number') {
+		    //&& typeof mem[arg.split('+')[1].toLowerCase()] === 'number') {
+		    && isRegister(arg.split('+')[1].toLowerCase())) {
 	      switch (arg.split('+')[1].toLowerCase()) {
 	      case 'a':
 	        pack(0x10);
