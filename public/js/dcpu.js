@@ -21,12 +21,12 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 
-var _trace = function(msg) {
+var _trace = function(msg, override) {
   //if (window.console && window.console.log) {
   //  console.log(msg);
   //}
   var c = document.getElementById("trace");
-  if (c && document.getElementById("entrace").checked) {
+  if (c && (document.getElementById("entrace").checked || override)) {
     var s = c.innerText;
     s = s + msg + "\n";
     c.innerText = s;
@@ -462,12 +462,18 @@ function step() {
 function assemble() {
   var asm = document.getElementById("assembly").value;
   var a = new Assembler(null);
-  var mem = a.compile(a.clean(asm));
-  var s = "";
-  for (var i = 0; i < mem.length; i++) {
-    s += hex(mem[i]) + "\n";
+  try {
+    var mem = a.compile(a.clean(asm));
+    var s = "";
+    for (var i = 0; i < mem.length; i++) {
+      s += hex(mem[i]) + "\n";
+    }
+    document.getElementById("hexbin").value = s;
+    
+  } catch (e) {
+    document.getElementById("hexbin").value = e
+    _trace(e, true);
   }
-  document.getElementById("hexbin").value = s;
 }
 
 var d = new dcpu();
