@@ -22,21 +22,16 @@
 
 
 var _trace = function(msg, override) {
-  //if (window.console && window.console.log) {
-  //  console.log(msg);
-  //}
-  var c = document.getElementById("trace");
-  if (c && (document.getElementById("entrace").checked || override)) {
-    var s = c.innerText;
+  if (entrace.checked || override) {
+    var s = tracediv.innerText;
     s = s + msg + "\n";
-    c.innerText = s;
-    c.scrollTop = c.scrollHeight;
+    tracediv.innerText = s;
+    tracediv.scrollTop = tracediv.scrollHeight;
   }
 };
 var _ramlog = function(msg) {
-  var c = document.getElementById("ramconsole");
-  if (c && document.getElementById("enramconsole").checked) {
-    c.innerHTML = msg;
+  if (enramcon.checked) {
+    ramcondiv.innerHTML = msg;
   }
 };
 var _console = function(msg) {
@@ -195,7 +190,7 @@ var dcpu_step = function(d) {
       d.data[d.pc] = a;
       return;
     default:
-      _trace("< ILLEGAL OPCODE > ");
+      _trace("< ILLEGAL OPCODE > ", true);
       throw "ILLEGAL OPCODE 0x" + op.toString(16);
     }
   }
@@ -427,7 +422,7 @@ var steploop = function(d) {
     _ramlog(dumpram(d));
     dcpu_step(d);
     stepnum++;
-    setTimeout(function() {steploop(d);}, 10);
+    setTimeout(function() {steploop(d);}, 0);
   }
 };
 
@@ -479,6 +474,12 @@ function assemble() {
 var d = new dcpu();
 var running = false;
 var stepnum = 0;
+
+var tracediv = document.getElementById("trace");
+var entrace = document.getElementById("entrace");
+
+var ramcondiv = document.getElementById("ramconsole");
+var enramcon = document.getElementById("enramconsole");
 
 reset_cpu();
 hexload();
