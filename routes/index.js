@@ -1,10 +1,51 @@
 
+var Prog = require("../models/prog").Prog;
+
 /*
  * GET home page.
  */
 
-exports.index = function(req, res){
-  res.render('index', { title: 'Express' });
+exports.index = function(req, res) {
+  if (req.params.id) {
+    Prog.findOne({shortid: req.params.id}, function(err, doc) {
+		   if (err) {
+		     res.end('program not found');
+		   }
+		   if (doc) {
+		     res.render('home.ejs', {layout: false,  prog: doc, title: 'Express' });  
+		   } else {
+		     res.end('no prog');
+		   }
+		   
+		 });
+  } else {
+    //var prog = new Prog();
+    var prog = {prog: "", hex: ""};
+    res.render('home.ejs', {layout: false,  prog: prog, title: 'Express' });  
+  }
+  
+};
+
+exports.create_new = function(req, res) {
+  var prog = new Prog();
+  prog.prog = req.body.prog;
+  prog.hex = req.body.hex;
+  prog.save(function (err, new_prog) {
+	      if (err) {
+		console.log(err);
+		res.end('there was an error'); // TODO fix
+	      }
+	      if (new_prog) {
+		var shortid = new_prog.shortid;
+		res.redirect("/" + shortid);
+	      } else {
+		res.end('there was an error...'); // TODO fix
+	      }
+	    });
+};
+
+exports.new_none = function(req, res) {
+  res.end('disallowed');
 };
 
 exports.new_post = function(req, res) {

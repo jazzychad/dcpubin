@@ -5,6 +5,7 @@
   "dependencies": {
     "express": "2.5.9",
     "jade": ">= 0.0.1",
+    "ejs": "0.7.1",
     "mongoose": "2.5.10",
     "shortid": "1.0.6"
   }

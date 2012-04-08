@@ -1,0 +1,84 @@
+<html>
+  <head>
+    <title>dcpu javascript emulator</title>
+  </head>
+  <body>
+    <div id="container">
+      <h1>dcpubin</h1>
+      <form method="POST" action="/new">
+      <input type="submit" value="SAVE"></input>
+      <p/>
+      <p/>
+      <div id="hex" style="position:relative; float:left;">
+	Assembly
+	<br/>
+	<button onClick="javascript:assemble(); return false;" value="assemble" >ASSEMBLE</button>
+	<button onClick="javascript:assemble();reset_cpu();hexload(); return false" value="asm,rst,load">ASM, RST, LOAD</button>
+	<br/>
+	<button onClick="javascript:assemble();reset_cpu();hexload();main(); return false" value="asm,rst,load">ASM, RST, LOAD, RUN</button>
+	<br/>
+	<textarea id="assembly" name="prog" rows=80 cols=30><%= prog.prog %></textarea>
+      </div>
+      <div id="hex" style="position:relative; float:left;">
+	Hex program. One word per line.
+	<br/>
+	<button onClick="javascript:reset_cpu(); return false;" value="stop" >RESET</button>
+	<button onClick="javascript:hexload(); return false;" value="stop" >LOAD</button>
+	<br/>
+	<button onClick="javascript:main();return false;" value="go" >RUN</button>
+	<button onClick="javascript:running=false; return false;" value="stop" >STOP</button>
+	<button onClick="javascript:step();; return false;" value="stop" >STEP</button>
+	<br/>
+	<textarea id="hexbin" name="hex" rows=80 cols=40><%= prog.hex %></textarea>
+      </div>
+      <div id="t" style="position:relative; float:left;">
+	Registers/RAM:
+	<br/>
+	<pre id="ramconsole" style="height:auto; width:600px; margin-bottom:10px;"></pre>
+	<hr/>
+	Trace:
+	<br/>
+	<button onClick="javascript:document.getElementById('trace').innerText='';">Clear</button>
+	<br/>
+	<pre id="trace" style="height:400px; width:600px; overflow:auto;"></pre>
+      </div>
+      <div id="c" style="position:relative; width:100px; float:left; margin-left: 20px;">
+	Console (32x32):
+	<br/>
+	<pre id="console"></pre>
+      </div>
+      <br clear="all">
+      </form>
+    </div> <!-- container -->
+	<!-- resources -->
+	<p/>
+	Resources:
+	<p/>
+	<a href="http://0x10c.com/doc/dcpu-16.txt">dcpu spec</a>
+	<br/>
+	<a href="https://github.com/jazzychad/dcpu-js">javascript emulator source</a>
+	<br/>
+	<a href="https://github.com/jazzychad/dcpu-asm">sample dcpu programs</a>
+	<br/>
+	<p/>
+	<!-- end resources -->
+
+    <script type="text/javascript" src="/js/dcpu.js"></script>
+    <script type="text/javascript" src="/js/assembler.js"></script>
+    
+    <script type="text/javascript">
+      
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-897151-23']);
+      _gaq.push(['_trackPageview']);
+      
+      (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+      
+    </script>
+  </body>
+</html>
+

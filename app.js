@@ -34,12 +34,19 @@ app.configure('production', function(){
 // Routes
 
 app.get('/', routes.index);
+app.get('/new', routes.new_none);
 
+app.get('/:id', routes.index);
+
+app.post('/new', routes.create_new);
+
+/*
 app.post('/post/new', routes.new_post);
 
 app.get('/posts', routes.post_index);
 
 app.get('/post/:id', routes.post_show);
+*/
 
 var port = process.env.PORT || 3000;
 app.listen(port, function(){
