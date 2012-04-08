@@ -2,6 +2,26 @@ var md5 = require("MD5");
 
 var Prog = require("../models/prog").Prog;
 
+function getClientIp(req) {
+  
+  var ipAddress;
+  // Amazon EC2 / Heroku workaround to get real client IP
+  var forwardedIpsStr = req.header('x-forwarded-for'); 
+  if (forwardedIpsStr) {
+    
+    // 'x-forwarded-for' header may return multiple IP addresses in
+    // the format: "client IP, proxy 1 IP, proxy 2 IP" so take the
+    // the first one
+    var forwardedIps = forwardedIpsStr.split(',');
+    ipAddress = forwardedIps[0];
+  }
+  if (!ipAddress) {
+    // Ensure getting client IP address still works in
+    // development environment
+    ipAddress = req.connection.remoteAddress;
+  }
+  return ipAddress;
+};
 
 /*
  * GET home page.
@@ -40,9 +60,12 @@ exports.create_new = function(req, res) {
   var prog = new Prog();
   prog.prog = req.body.prog;
   prog.hex = req.body.hex;
+  prog.ip = getClientIp(req);
   var hash = md5(prog.prog + prog.hex);
   prog.hash = hash;
   console.log("hash: " + hash);
+  console.log("ip: " + prog.ip);
+
   Prog.findOne({hash: hash}, function(err, doc) {
 		 if (err) {
 		   res.end('error, error');

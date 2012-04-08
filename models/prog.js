@@ -10,6 +10,7 @@ var ProgSchema = new Schema({
 			      hex: {type: String, default: ""},
 			      lang: {type: String, default: "asm"},
 			      hash: {type: String, index: true, default: ""},
+			      ip: {type: String, default: ""},
 			      tstamp: {type: Date, default: function(){return new Date();}}
 			    });
 
