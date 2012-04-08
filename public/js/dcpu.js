@@ -175,7 +175,6 @@ var dcpu_step = function(d) {
   var dst;
   var res;
   var a, b, pa, pb;
-  var cond = false;
 
   //d.data[d.pc]++;
   op = d.data[d.m + d.data[d.pc]++];
@@ -188,6 +187,10 @@ var dcpu_step = function(d) {
       d.data[d.sp]--;
       d.data[d.m + d.data[d.sp]] = d.data[d.pc];
       d.data[d.pc] = a;
+      return;
+    case 0x02: // BRK - NON STANDARD, NOT IN SPEC
+      _trace("BREAK");
+      throw "BREAK";
       return;
     default:
       _trace("< ILLEGAL OPCODE > ", true);
@@ -464,7 +467,7 @@ function assemble() {
       s += hex(mem[i]) + "\n";
     }
     document.getElementById("hexbin").value = s;
-    
+
   } catch (e) {
     document.getElementById("hexbin").value = e;
     _trace(e, true);
