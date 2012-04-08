@@ -7,6 +7,7 @@
     "jade": ">= 0.0.1",
     "ejs": "0.7.1",
     "mongoose": "2.5.10",
-    "shortid": "1.0.6"
+    "shortid": "1.0.6",
+    "MD5": "latest"
   }
 }

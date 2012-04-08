@@ -1,5 +1,7 @@
+var md5 = require("MD5");
 
 var Prog = require("../models/prog").Prog;
+
 
 /*
  * GET home page.
@@ -38,18 +40,34 @@ exports.create_new = function(req, res) {
   var prog = new Prog();
   prog.prog = req.body.prog;
   prog.hex = req.body.hex;
-  prog.save(function (err, new_prog) {
-	      if (err) {
-		console.log(err);
-		res.end('there was an error'); // TODO fix
-	      }
-	      if (new_prog) {
-		var shortid = new_prog.shortid;
-		res.redirect("/" + shortid);
-	      } else {
-		res.end('there was an error...'); // TODO fix
-	      }
-	    });
+  var hash = md5(prog.prog + prog.hex);
+  prog.hash = hash;
+  console.log("hash: " + hash);
+  Prog.findOne({hash: hash}, function(err, doc) {
+		 if (err) {
+		   res.end('error, error');
+		   return;
+		 }
+		 if (doc) {
+		   res.redirect("/" + doc.shortid);
+		   return;
+		 }
+
+		 prog.save(function (err, new_prog) {
+			     if (err) {
+			       console.log(err);
+			       res.end('there was an error'); // TODO fix
+			     }
+			     if (new_prog) {
+			       var shortid = new_prog.shortid;
+			       res.redirect("/" + shortid);
+			     } else {
+			       res.end('there was an error...'); // TODO fix
+			     }
+			   });
+		 
+	       });
+
 };
 
 exports.new_none = function(req, res) {

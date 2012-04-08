@@ -9,6 +9,7 @@ var ProgSchema = new Schema({
 			      prog: {type: String, default: ""},
 			      hex: {type: String, default: ""},
 			      lang: {type: String, default: "asm"},
+			      hash: {type: String, index: true, default: ""},
 			      tstamp: {type: Date, default: function(){return new Date();}}
 			    });
 
