@@ -5,6 +5,10 @@
   <body>
     <div id="container">
       <h1>dcpubin</h1>
+      <% if (prog.shortid) { %>
+      <input type="text" size=50 name="asdfasdf" value="http://dcpubin.com/<%= prog.shortid %>"></input>
+      <p/>
+      <% } %>
       <form method="POST" action="/new">
       <input type="submit" value="SAVE"></input>
       <p/>
@@ -79,6 +83,7 @@
       })();
       
     </script>
+    <img src="//whos.amung.us/swidget/cswn84ek20ub.gif" width="1" height="1" border="0" />
   </body>
 </html>
 

@@ -20,7 +20,7 @@ exports.index = function(req, res) {
 		   if (doc) {
 		     res.render('home.ejs', {layout: false,  prog: doc, title: 'Express' });  
 		   } else {
-		     var prog = {prog: "", hex: ""};
+		     var prog = {prog: "", hex: "", shortid: null};
 		     res.render('home.ejs', {layout: false,  prog: prog, title: 'Express' });  
 		     //res.end('no prog');
 		   }
