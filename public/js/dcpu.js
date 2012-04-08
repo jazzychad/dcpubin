@@ -103,7 +103,7 @@ var dcpu = function() {
   this.m = this.lit + litarr.length;
 
   this.video_start = this.m + 0x8000;
-  this.video_size = 0x400; // 32x32 = 1024
+  this.video_size = 0x200; // 32x16 = 512 words (1024 bytes)
 
   this.reset = function() {
     for (var i = 0; i < size; i++) {
