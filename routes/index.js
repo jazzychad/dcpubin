@@ -6,15 +6,23 @@ var Prog = require("../models/prog").Prog;
  */
 
 exports.index = function(req, res) {
+  var shortid;
   if (req.params.id) {
-    Prog.findOne({shortid: req.params.id}, function(err, doc) {
+    shortid = req.params.id;
+  } else {
+    shortid = "esRCW6cRn";
+  }
+  if (shortid) {
+    Prog.findOne({shortid: shortid}, function(err, doc) {
 		   if (err) {
 		     res.end('program not found');
 		   }
 		   if (doc) {
 		     res.render('home.ejs', {layout: false,  prog: doc, title: 'Express' });  
 		   } else {
-		     res.end('no prog');
+		     var prog = {prog: "", hex: ""};
+		     res.render('home.ejs', {layout: false,  prog: prog, title: 'Express' });  
+		     //res.end('no prog');
 		   }
 		   
 		 });
