@@ -189,7 +189,7 @@ var dcpu_step = function(d) {
       d.data[d.pc] = a;
       return;
     case 0x02: // BRK - NON STANDARD, NOT IN SPEC
-      _trace("BREAK");
+      _trace("BREAK", true);
       throw "BREAK";
       return;
     default:
