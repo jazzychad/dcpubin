@@ -34,3 +34,13 @@ exports.post_index = function(req, res) {
 	      res.render('post_index', {title: "posts index", posts: docs});
 	    });
 };
+
+exports.post_show = function(req, res) {
+  var Post = require("../models/post").Post;
+  Post.findOne({shortid: req.params.id}, function(err, doc) {
+		  if (err) {
+		    res.end('post not found');
+		  }
+		  res.render('post_show', {title: "post show", post: doc});
+		});
+};
