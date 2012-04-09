@@ -140,13 +140,18 @@ var dcpu_opr = function(d, code) {
     return d.m + ((d.data[d.r + (code & 7)] + d.data[d.m + d.data[d.pc]++]) & 0xffff);
 
   case 0x18: // pop
-    return d.m + d.data[d.sp]++;
+    //d.data[d.sp] = (d.data[d.sp] + 1) & 0xffff;
+    var ret = d.m + d.data[d.sp];
+    d.data[d.sp] = (d.data[d.sp] + 1) & 0xffff;
+    //return d.m + d.data[d.sp];
+    return ret;
 
   case 0x19: // peek
     return d.m + d.data[d.sp];
 
   case 0x1a: // push
-    d.data[d.sp]--;
+    d.data[d.sp] = (d.data[d.sp] - 1) & 0xffff;
+    //d.data[d.sp]--;
     return d.m + d.data[d.sp];
 
   case 0x1b: // sp
@@ -184,7 +189,8 @@ var dcpu_step = function(d) {
     a = d.data[pa];
     switch ((op >> 4) & 0x3f) {
     case 0x01:
-      d.data[d.sp]--;
+      d.data[d.sp] = (d.data[d.sp] - 1) & 0xffff;
+      //d.data[d.sp]--;
       d.data[d.m + d.data[d.sp]] = d.data[d.pc];
       d.data[d.pc] = a;
       return;
@@ -433,7 +439,7 @@ var steploop = function(d) {
 function reset_cpu() {
   stepnum = 0;
   d.reset();
-  d.data[d.sp] = 0xffff;
+  d.data[d.sp] = 0x0; //0xffff;
   var c = document.getElementById("console");
   if (c) {
     c.innerText = "";
