@@ -58,11 +58,11 @@ var Assembler =
       }
 
       function isWhitespace(character) {
-	return ['\n', '\r', '\t', ' '].indexOf(character) !== -1;
+	return ['\n', '\r', '\t', ' ',','].indexOf(character) !== -1;
       }
 
       function getToken(string) {
-	return string.split(' ')[0].split('\t')[0];
+	return string.split(' ')[0].split('\t')[0].split(',')[0];
       }
 
       Assembler.prototype = {
@@ -108,10 +108,12 @@ var Assembler =
 		      arg = getToken(line.substr(i));
 		    }
 
+		    /*
 	            if(arg.charAt(arg.length - 1) === ',') {
 	              arg = arg.substr(0, arg.length - 1);
 	              i++;
 	            }
+		     */
 	            i += arg.length;
 
 	            args.push(arg);
@@ -250,7 +252,7 @@ var Assembler =
 	      }
 
 	      //0x20-0x3f: literal value 0x00-0x1f (literal)
-	      if(value <= 0x1f && opcodes[op] !== null) {
+	      if(!pointer && value <= 0x1f && opcodes[op] !== null) {
 	        pack(value + 0x20);
 	      } else {
 	        //0x1e: [next word]
@@ -364,7 +366,8 @@ var Assembler =
 
 	      default:
 	        if(arg) {
-	          pack(0x1f);
+		  if (pointer) pack(0x1e);
+	          else pack(0x1f);
 	          subroutineQueue.push({
 					 id: arg,
 					 address: address + words.length
@@ -408,7 +411,15 @@ var Assembler =
 		    }
 		  }
 		  if(!arg) throw new Error('Unterminated string literal');
-	        } else {
+	        } else if(line.charAt(i) === '[') {
+		  for(j = i + 1; j < line.length; j++) {
+		    if(line.charAt(j) === ']') {
+		      arg = line.substring(i, j+1).replace(' ', '');
+		      break;
+		    }
+		  }
+		  if(!arg) throw new Error('Unclosed pointer brackets');
+		} else {
                   arg = getToken(line.substr(i));
                 }
 
