@@ -6,7 +6,9 @@ shortid.seed(20234123);
 
 var create_shortid = function(schema, options) {
   schema.pre('save', function(next) {
-	       this.shortid = shortid.generate();
+	       if (this.shortid == undefined) {
+		 this.shortid = shortid.generate();
+	       }
 	       next();
 	     });
 };

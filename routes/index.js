@@ -43,6 +43,8 @@ exports.index = function(req, res) {
 		     res.end('program not found');
 		   }
 		   if (doc) {
+		     doc.views +=1;
+		     doc.save(function(e,d){});
 		     res.render('home.ejs', {layout: false,  prog: doc, show_copy: show_copy});  
 		   } else {
 		     var prog = {prog: "", hex: "", shortid: null};

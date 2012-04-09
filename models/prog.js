@@ -5,6 +5,7 @@ var Schema = mongoose.Schema, ObjectId = Schema.ObjectId;
 
 var ProgSchema = new Schema({
 			      shortid: {type: String, index: true, uniqe: true},
+			      views: {type: Number, default: 0},
 			      priv: {type: Boolean, default: false},
 			      prog: {type: String, default: ""},
 			      hex: {type: String, default: ""},
