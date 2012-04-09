@@ -431,9 +431,21 @@ var steploop = function(d) {
     _ramlog(dumpram(d));
     dcpu_step(d);
     stepnum++;
-    setTimeout(function() {steploop(d);}, 0);
+    if (typeof window !== 'undefined' && window.postMessage) {
+      window.postMessage('steploop', '*');
+    } else {
+      setTimeout(function() {steploop(d);}, 0);
+    }
   }
 };
+
+if( typeof window !== 'undefined') {
+  window.addEventListener('message', function(e) {
+                            if(e.source === window && e.data === 'steploop') {
+                              steploop(d);
+                            }
+			  });
+}
 
 
 function reset_cpu() {
