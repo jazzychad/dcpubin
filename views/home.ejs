@@ -50,7 +50,7 @@
       <form method="POST" action="/new">
       <input type="submit" value="SAVE PROGRAM"></input>
       <br/>
-      <% if (prog.views !== undefined) {%>Views: <%= prog.views %><% } %>
+      <% if (prog.views > 0) {%>Views: <%= prog.views %><% } %>
       <p/>
       <p/>
       <div id="asm" style="position:relative; float:left;">
