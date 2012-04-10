@@ -37,7 +37,7 @@
       </object>
       <!-- end clippy -->
       <br/>
-      <% if (prog.views > 0) {%>Views: <%= prog.views %><% } %>
+      <% if (prog.views >= 0) {%>Views: <%= (prog.views + 1) %><% } %>
       <img src="/view/<%= prog.shortid -%>" height=1 width=1 style="display:none;"/>
       <% } %>
       <% } %>

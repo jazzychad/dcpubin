@@ -5,7 +5,7 @@
       <table class="table table-striped table-bordered">
 	<thead>
 	  <tr>
-	    <!-- <th>Views</th> -->
+	    <th>Views</th>
 	    <th>Link</th>
 	    <th>Title</th>
 	    <th>Author</th>
@@ -14,7 +14,7 @@
 	<tbody>
 	  <% for(var i = 0, _len = progs.length; i < _len; i++) { var prog = progs[i] -%>
 	     <tr>
-	       <!-- <td><%= prog.views -%></td> -->
+	       <td><%= prog.views -%></td>
 	       <td><a href="/<%= prog.shortid -%>"><%= prog.shortid -%></a></td>
 	       <td><%= prog.title || "" -%></td>
 	       <td><%= prog.auth || "anonymous" -%></td>
