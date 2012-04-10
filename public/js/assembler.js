@@ -145,7 +145,7 @@ var Assembler =
 	  var prevline = null;
 
 	  function isRegister(s) {
-	    switch(s) {
+	    switch(s.trim().toLowerCase()) {
 	    case 'a': case 'b': case 'c': case 'x': case 'y': case 'z':
 	    case 'i': case 'j': case 'pc': case 'sp': case 'o':
 	      return true;
@@ -162,7 +162,7 @@ var Assembler =
 	  function parse(arg) {
 	    arg = arg.replace('\t', '').replace('\n', '');
 
-	    var pointer = false, offset;
+	    var pointer = false, offset, args;
 	    if(arg.charAt(0) === '[' && arg.charAt(arg.length - 1) === ']') {
 	      pointer = true;
 	      arg = arg.substring(1, arg.length - 1);
@@ -195,11 +195,21 @@ var Assembler =
 	    }
 
 	    //next word + register
-	    else if(pointer && arg.split('+').length === 2
-		    && typeof arg.split('+')[1] === 'string'
-		    //&& typeof mem[arg.split('+')[1].toLowerCase()] === 'number') {
-		    && isRegister(arg.split('+')[1].toLowerCase())) {
-	      switch (arg.split('+')[1].toLowerCase()) {
+	    else if(pointer &&
+                    (args = arg.split('+')).length === 2) {
+              var reg, offset;
+              if (isRegister(args[0])) {
+                reg = args[0];
+                offset = args[1];
+              } else if (isRegister(args[1])) {
+                reg = args[1];
+                offset = args[0];
+              }
+
+              reg = reg.trim().toLowerCase();
+              offset = parseInt(offset); // accepts hex, octal, decimal and binary
+
+	      switch (reg) {
 	      case 'a':
 	        pack(0x10);
 	        break;
@@ -226,17 +236,15 @@ var Assembler =
 	        break;
 	      }
 
-	      if(parseInt(arg.split('+')[0]) || parseInt(arg.split('+')[0]) === 0) {
-	        var offset = parseInt(arg.split('+')[0]);
-
+	      if(offset || offset === 0) {
 		if(offset < 0 || offset > 0xffff) {
 		  throw new Error('Invalid offset [' + arg + '], must be between 0 and 0xffff');
 		}
-
+                
 	        words.push(offset);
 	      } else {
 	        subroutineQueue.push({
-		                       id: arg.split('+')[0],
+		                       id: reg,
 		                       address: address + words.length
 				     });
 		words.push(0x0000);
@@ -407,14 +415,14 @@ var Assembler =
 		    if(line.charAt(j) === '"'
 		       && (line.charAt(j-1) !== '\\' || line.charAt(j-2) === '\\')) {
 		      arg = line.substring(i, j+1);
-		      i = j + 1;
+                      break;
 		    }
 		  }
 		  if(!arg) throw new Error('Unterminated string literal');
 	        } else if(line.charAt(i) === '[') {
 		  for(j = i + 1; j < line.length; j++) {
 		    if(line.charAt(j) === ']') {
-		      arg = line.substring(i, j+1).replace(' ', '');
+		      arg = line.substring(i, j+1);
 		      break;
 		    }
 		  }
@@ -433,7 +441,7 @@ var Assembler =
 
                 if((opcodes[op] > 0xff && args.length > 1)
 		  || (opcodes[op] !== null && args.length > 2)) {
-                  throw new Error('Invalid amount of arguments for op ' + op);
+                  throw new Error('Invalid amount of arguments for op ' + op +'(args:'+ args.toSource() +')');
                 }
               }
 	    }
