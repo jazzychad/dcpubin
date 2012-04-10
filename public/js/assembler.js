@@ -200,13 +200,16 @@ var Assembler =
               var reg, offset;
               if (isRegister(args[0])) {
                 reg = args[0];
-                offset = parseInt(args[1])
+                offset = args[1];
               } else if (isRegister(args[1])) {
-                reg = args[1]
-                offset = parseInt(args[0]);
+                reg = args[1];
+                offset = args[0];
               }
-                
-	      switch (reg.toLowerCase()) {
+
+              reg = reg.trim().toLowerCase();
+              offset = parseInt(offset); // accepts hex, octal, decimal and binary
+
+	      switch (reg) {
 	      case 'a':
 	        pack(0x10);
 	        break;
@@ -412,14 +415,14 @@ var Assembler =
 		    if(line.charAt(j) === '"'
 		       && (line.charAt(j-1) !== '\\' || line.charAt(j-2) === '\\')) {
 		      arg = line.substring(i, j+1);
-		      i = j + 1;
+                      break;
 		    }
 		  }
 		  if(!arg) throw new Error('Unterminated string literal');
 	        } else if(line.charAt(i) === '[') {
 		  for(j = i + 1; j < line.length; j++) {
 		    if(line.charAt(j) === ']') {
-		      arg = line.substring(i, j+1).replace(' ', '');
+		      arg = line.substring(i, j+1);
 		      break;
 		    }
 		  }
