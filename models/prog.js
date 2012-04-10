@@ -8,6 +8,7 @@ var ProgSchema = new Schema({
 			      views: {type: Number, default: 0},
 			      auth: {type: String, default: ""}, /* author */
 			      title: {type: String, default: ""},
+			      fork: {type: String},
 			      priv: {type: Boolean, default: false},
 			      prog: {type: String, default: ""},
 			      hex: {type: String, default: ""},

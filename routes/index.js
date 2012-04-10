@@ -73,7 +73,7 @@ exports.fork_prog = function(req, res) {
 		 if (doc) {
 		   doc.title = "";
 		   doc.auth = "";
-		   res.render('dcpu.ejs', {layout: true,  prog: doc, show_copy: false, isnew: true});
+		   res.render('dcpu.ejs', {layout: true,  prog: doc, show_copy: false, isnew: true, fork: true});
 		 } else {
 		   res.redirect("/");
 		 }
@@ -104,6 +104,9 @@ exports.create_new = function(req, res) {
   prog.hex = req.body.hex;
   prog.auth = req.body.auth;
   prog.title = req.body.title;
+  if (typeof req.body.fork !== 'undefined' && req.body.fork) {
+    prog.fork = req.body.fork;
+  }
   prog.ip = getClientIp(req);
   var hash = md5(prog.prog + prog.hex + prog.auth + prog.title);
   prog.hash = hash;

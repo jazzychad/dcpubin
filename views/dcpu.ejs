@@ -36,6 +36,9 @@
 	       />
       </object>
       <!-- end clippy -->
+      <% if (typeof prog.fork !== 'undefined' && prog.fork) { -%>
+      forked from <a href="/<%= prog.fork -%>"><%= prog.fork -%></a>
+      <% } %>
       <br/>
       <% if (prog.views >= 0) {%>Views: <%= (prog.views + 1) %><% } %>
       <img src="/view/<%= prog.shortid -%>" height=1 width=1 style="display:none;"/>
@@ -55,6 +58,9 @@
 	  </tr>
 	</table>
       <input class="btn btn-primary" type="submit" value="SAVE PROGRAM"></input>
+      <% if (typeof fork !== 'undefined' && fork) { -%>
+      <input type="hidden" name="fork" value="<%= prog.shortid -%>"></input>
+      <% } %>
       <br/>
       <% } else { %>
       <a href="/fork/<%= prog.shortid %>" class="btn btn-primary">Fork / Edit</a>
