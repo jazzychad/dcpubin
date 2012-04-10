@@ -51,6 +51,10 @@
       <input type="submit" value="SAVE PROGRAM"></input>
       <br/>
       <% if (prog.views > 0) {%>Views: <%= prog.views %><% } %>
+      <br/>
+      <input type="text" size="30" placeholder="title (optional)" name="title" value="<%= prog.title || "" %>"></input>
+      <br/>
+      <input type="text" size="30" placeholder="author (optional)" name="auth" value="<%= prog.auth || "" %>"></input>
       <p/>
       <p/>
       <div id="asm" style="position:relative; float:left;">

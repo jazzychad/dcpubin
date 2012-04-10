@@ -1,0 +1,115 @@
+    <style>
+      textarea {font-family:"Courier New", Courier, monospace;}
+      #t {background-color: #eee; padding:5px;}
+      #hex, #asm {padding: 5px;}
+      #console {background-color: #00f; color: #fff;}
+    </style>
+
+    <div id="container">
+    <div class="">
+    <div class="">
+      <% if (!isnew) { %>
+      <h1><strong><%= prog.title || "" %></strong> by <strong><%= (prog.auth || "anonymous") %></strong></h1>
+      <% if (show_copy) { %>
+      <input type="text" size=40 name="asdfasdf" value="http://dcpubin.com/<%= prog.shortid %>"></input>
+      <!-- clippy -->
+      <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000"
+              width="110"
+              height="14"
+              id="clippy" >
+	<param name="movie" value="/swf/clippy.swf"/>
+	<param name="allowScriptAccess" value="always" />
+	<param name="quality" value="high" />
+	<param name="scale" value="noscale" />
+	<param NAME="FlashVars" value="text=http://dcpubin.com/<%= prog.shortid %>">
+	<param name="bgcolor" value="#121417">
+	<embed src="/swf/clippy.swf"
+               width="110"
+               height="14"
+               name="clippy"
+               quality="high"
+               allowScriptAccess="always"
+               type="application/x-shockwave-flash"
+               pluginspage="http://www.macromedia.com/go/getflashplayer"
+               FlashVars="text=http://dcpubin.com/<%= prog.shortid %>"
+               bgcolor="#121417"
+	       />
+      </object>
+      <!-- end clippy -->
+      <br/>
+      <% if (prog.views > 0) {%>Views: <%= prog.views %><% } %>
+      <img src="/view/<%= prog.shortid -%>" height=1 width=1 style="display:none;"/>
+      <% } %>
+      <% } %>
+      <br/>
+      <form method="POST" action="/new">
+	<% if (isnew) { %>
+	<table>
+	  <tr>
+	    <td>Title</td>
+	    <td><input type="text" size="30" placeholder="title (optional)" name="title" value="<%= prog.title || "" %>"></input></td>
+	  </tr>
+	  <tr>
+	    <td>Author</td>
+	    <td><input type="text" size="30" placeholder="author (optional)" name="auth" value="<%= prog.auth || "" %>"></input></td>
+	  </tr>
+	</table>
+      <input class="btn btn-primary" type="submit" value="SAVE PROGRAM"></input>
+      <br/>
+      <% } else { %>
+      <a href="/fork/<%= prog.shortid %>" class="btn btn-primary">Fork / Edit</a>
+      <% } %>
+      <p/>
+      <p/>
+      <div id="asm" style="position:relative; float:left;">
+	Assembly
+	<br/>
+	<button class="btn btn-mini" onClick="javascript:assemble(); return false;" value="assemble" >ASSEMBLE</button>
+	<button class="btn btn-mini" onClick="javascript:assemble();reset_cpu();hexload(); return false;" value="asm,rst,load">ASM, RST, LOAD</button>
+	<br/>
+	<button class="btn btn-mini" onClick="javascript:assemble();reset_cpu();hexload();main(); return false;" value="asm,rst,load">ASM, RST, LOAD, RUN</button>
+	<br/>
+	<textarea <% if (!isnew) { -%>disabled="true" <% } -%> class="span5" id="assembly" name="prog" rows=80 cols=40 wrap="off"><%= prog.prog %></textarea>
+      </div>
+      <div id="hex" style="position:relative; float:left;">
+	Hex program. One word per line.
+	<br/>
+	<button class="btn btn-mini" onClick="javascript:reset_cpu(); return false;" value="stop" >RESET</button>
+	<button class="btn btn-mini" onClick="javascript:hexload(); return false;" value="stop" >LOAD</button>
+	<br/>
+	<button class="btn btn-mini btn-primary" onClick="javascript:try{main();}catch(e){_trace(e,true);}return false;" value="go" >RUN</button>
+	<button class="btn btn-mini btn-danger" onClick="javascript:running=false; return false;" value="stop" >STOP</button>
+	<button class="btn btn-mini" onClick="javascript:try{step();}catch(e){_trace(e,true);} return false;" value="stop" >STEP</button>
+	<br/>
+	<textarea <% if (!isnew) { -%>disabled="true" <% } -%> id="hexbin" name="hex" rows=80 cols=20 wrap="off"><%= prog.hex %></textarea>
+      </div>
+      <div id="t" style="position:relative; float:left;">
+	Registers/RAM: <input type="checkbox" id="enramconsole" checked="checked"></input>
+	<br/>
+	<pre id="ramconsole" style="height:auto; width:auto; margin-bottom:10px;"></pre>
+	<hr/>
+	Trace: <input type="checkbox" id="entrace"></input>
+	<br/>
+	<button class="btn btn-mini" onClick="javascript:document.getElementById('trace').innerText='';return false;">Clear</button>
+	<br/>
+	<pre id="trace" style="height:400px; width:auto; overflow:auto;"></pre>
+      </div>
+      <div id="c" style="position:relative; width:auto; float:left; margin-left: 20px;">
+	Console (32x16):
+	<br/>
+	<pre id="console"></pre>
+	<p/>
+	<a href="https://github.com/jazzychad/dcpubin/issues">Submit issues and feature requests here.</a>
+      </div>
+      <br clear="all">
+      </form>
+    </div>
+    </div>
+    <footer class="footer">
+      <hr/>
+      &copy; dcpubin
+    </footer>
+
+    </div> <!-- container -->
+    <script type="text/javascript" src="/js/dcpu.js"></script>
+    <script type="text/javascript" src="/js/assembler.js"></script>

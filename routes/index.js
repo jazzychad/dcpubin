@@ -44,15 +44,17 @@ exports.index = function(req, res) {
 		   }
 		   if (doc) {
 		     if (show_copy) {
+		       /*
 		       doc.views +=1;
 		       doc.save(function(e,d){});
+			*/
 		     } else {
 		       doc.views = 0;
 		     }
-		     res.render('home.ejs', {layout: false,  prog: doc, show_copy: show_copy});
+		     res.render('dcpu.ejs', {layout: true,  prog: doc, show_copy: show_copy, isnew: false});
 		   } else {
 		     var prog = {prog: "", hex: "", shortid: null};
-		     res.render('home.ejs', {layout: false,  prog: prog, show_copy: false});  
+		     res.render('dcpu.ejs', {layout: true,  prog: prog, show_copy: false, isnew: false});
 		   }
 		   
 		 });
@@ -62,12 +64,48 @@ exports.index = function(req, res) {
   
 };
 
+exports.fork_prog = function(req, res) {
+  var shortid = req.params.id;
+  Prog.findOne({shortid: shortid}, function(err, doc) {
+		 if (err) {
+		   res.end('program not found');
+		 }
+		 if (doc) {
+		   doc.title = "";
+		   doc.auth = "";
+		   res.render('dcpu.ejs', {layout: true,  prog: doc, show_copy: false, isnew: true});
+		 } else {
+		   res.redirect("/");
+		 }
+		 
+	       });
+
+};
+
+exports.prog_human_view = function(req, res) {
+  var shortid = req.params.id;
+  Prog.findOne({shortid: shortid}, function(err, doc) {
+		 if (err) {
+		   res.end('');
+		 }
+		 if (doc) {
+		   doc.views +=1;
+		   doc.save(function(e,d){});
+		   res.end('');
+		 } else {
+		   res.end('');
+		 }
+	       });
+};
+
 exports.create_new = function(req, res) {
   var prog = new Prog();
   prog.prog = req.body.prog;
   prog.hex = req.body.hex;
+  prog.auth = req.body.auth;
+  prog.title = req.body.title;
   prog.ip = getClientIp(req);
-  var hash = md5(prog.prog + prog.hex);
+  var hash = md5(prog.prog + prog.hex + prog.auth + prog.title);
   prog.hash = hash;
   console.log("hash: " + hash);
   console.log("ip: " + prog.ip);
@@ -99,6 +137,23 @@ exports.create_new = function(req, res) {
 
 };
 
-exports.new_none = function(req, res) {
-  res.end('disallowed');
+exports.new_prog = function(req, res) {
+  var prog = {prog: "", hex: ""};
+  res.render('dcpu.ejs', {layout: true, isnew: true, prog: prog, show_copy: false});
+};
+
+exports.progs_newest = function(req, res) {
+  Prog.find({}).desc('tstamp').exec(function(err, docs) {
+				      res.render('progs_newest.ejs', {progs: docs});
+				      //res.end(docs.toString());
+			   });
+  
+};
+
+exports.progs_most_viewed = function(req, res) {
+  Prog.find({}).desc('views').exec(function(err, docs) {
+				     res.render('progs_top.ejs', {progs: docs});
+				     //res.end(docs.toString());
+			   });
+  
 };

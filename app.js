@@ -34,11 +34,17 @@ app.configure('production', function(){
 // Routes
 
 app.get('/', routes.index);
-app.get('/new', routes.new_none);
+app.get('/new', routes.new_prog);
+
+app.get('/newest', routes.progs_newest);
+app.get('/top', routes.progs_most_viewed);
+
+app.get('/fork/:id', routes.fork_prog);
+app.get('/view/:id', routes.prog_human_view);
 
 app.get('/:id', routes.index);
-
 app.post('/new', routes.create_new);
+
 
 var port = process.env.PORT || 3000;
 app.listen(port, function(){
