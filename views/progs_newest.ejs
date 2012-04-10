@@ -9,6 +9,7 @@
 	    <th>Link</th>
 	    <th>Title</th>
 	    <th>Author</th>
+	    <th>Forked From</th>
 	  </tr>
 	</thead>
 	<tbody>
@@ -18,6 +19,7 @@
 	       <td><a href="/<%= prog.shortid -%>"><%= prog.shortid -%></a></td>
 	       <td><%= prog.title || "" -%></td>
 	       <td><%= prog.auth || "anonymous" -%></td>
+	       <td><a href="/<%= prog.fork -%>"><%= prog.fork || "" -%><a/></td>
 	     </tr>
 	  <% } -%>
 	</tbody>
