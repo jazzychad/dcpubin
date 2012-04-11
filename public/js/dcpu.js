@@ -37,7 +37,7 @@ var _ramlog = function(msg) {
 var _console = function(msg) {
   var c = document.getElementById("console");
   if (c) {
-    c.innerHTML = msg;
+    c.innerText = msg;
   }
 };
 
