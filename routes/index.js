@@ -33,9 +33,11 @@ exports.index = function(req, res) {
   if (req.params.id) {
     shortid = req.params.id;
     show_copy = true;
+    console.log("/" + shortid);
   } else {
     shortid = "esRCW6cRn";
     show_copy = false;
+    console.log("/");
   }
   if (shortid) {
     Prog.findOne({shortid: shortid}, function(err, doc) {
@@ -66,6 +68,7 @@ exports.index = function(req, res) {
 
 exports.fork_prog = function(req, res) {
   var shortid = req.params.id;
+  console.log("/fork/" + shortid);
   Prog.findOne({shortid: shortid}, function(err, doc) {
 		 if (err) {
 		   res.end('program not found');
@@ -99,6 +102,7 @@ exports.prog_human_view = function(req, res) {
 };
 
 exports.create_new = function(req, res) {
+  console.log("/new");
   var prog = new Prog();
   prog.prog = req.body.prog;
   prog.hex = req.body.hex;
@@ -141,11 +145,13 @@ exports.create_new = function(req, res) {
 };
 
 exports.new_prog = function(req, res) {
+  console.log("/new");
   var prog = {prog: "", hex: ""};
   res.render('dcpu.ejs', {layout: true, isnew: true, prog: prog, show_copy: false});
 };
 
 exports.progs_newest = function(req, res) {
+  console.log("/newest");
   Prog.find({}).desc('tstamp').exec(function(err, docs) {
 				      res.render('progs_newest.ejs', {progs: docs});
 				      //res.end(docs.toString());
@@ -154,6 +160,7 @@ exports.progs_newest = function(req, res) {
 };
 
 exports.progs_most_viewed = function(req, res) {
+  console.log("/top");
   Prog.find({}).desc('views').exec(function(err, docs) {
 				     res.render('progs_top.ejs', {progs: docs});
 				     //res.end(docs.toString());
