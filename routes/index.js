@@ -55,8 +55,8 @@ exports.index = function(req, res) {
 		     }
 		     res.render('dcpu.ejs', {layout: true,  prog: doc, show_copy: show_copy, isnew: false});
 		   } else {
-		     var prog = {prog: "", hex: "", shortid: null};
-		     res.render('dcpu.ejs', {layout: true,  prog: prog, show_copy: false, isnew: false});
+		     // non-existent shorti
+		     res.redirect("/");
 		   }
 		   
 		 });
