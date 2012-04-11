@@ -441,7 +441,7 @@ var Assembler =
 
                 if((opcodes[op] > 0xff && args.length > 1)
 		  || (opcodes[op] !== null && args.length > 2)) {
-                  throw new Error('Invalid amount of arguments for op ' + op +'(args:'+ args.toSource() +')');
+                  throw new Error('Invalid amount of arguments for op ' + op +'(args:'+ args.toString() +')');
                 }
               }
 	    }
